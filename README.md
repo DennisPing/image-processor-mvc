@@ -16,3 +16,17 @@ The point of this project is to learn Python by redo-ing my old Java homework. T
 1. Concise, efficient code - I purposely chose to do tasks manually in order to practice Python fundamentals.
 2. Pure object oriented programming - Python gives me some flexibility
 3. Pure functional programming - I still want to practice OOP if applicable
+
+## Features that are working:
+- [x] Blur
+- [x] Sharpen
+- [x] Greyscale
+- [x] Sepia
+- [x] Mosaic
+- [ ] Pixelate
+- [ ] Dither
+
+## To-do
+- [ ] Controller
+- [ ] View
+- [ ] Testing with PyTest

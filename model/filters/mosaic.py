@@ -77,7 +77,7 @@ class Mosaic:
 		matrix_row, matrix_col = np.meshgrid(matrix_row_idx, matrix_col_idx, indexing="ij")
 
 		matrix_coord = np.stack((matrix_row.ravel(), matrix_col.ravel()), axis=1)
-		all_dist_idx = cdist(matrix_coord, seeds)
+		all_dist_idx = cdist(matrix_coord, seeds, 'correlation')
 		
 		min_dist_idx = all_dist_idx.argmin(axis=1)
 		min_dist_idx = min_dist_idx.reshape((width, height))
