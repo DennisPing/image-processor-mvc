@@ -8,6 +8,6 @@ if __name__ == "__main__":
 	#path = None
 	ps1.load(path)
 
-	ps1.mosaic(1000)
+	ps1.mosaic(500)
 	myImage = ps1.getImage()
 	myImage.show()

@@ -10,4 +10,4 @@ class Greyscale(DotProduct):
 		kernel = np.array([[0.2126, 0.7152, 0.0722],
 							[0.2126, 0.7152, 0.0722],
 							[0.2126, 0.7152, 0.0722]])
-		return self.naive_dotproduct(matrix, kernel)
+		return self.fast_dotproduct(matrix, kernel)

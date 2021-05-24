@@ -23,7 +23,6 @@ class Mosaic:
 		t0 = time()
 		width = matrix.shape[0]
 		height = matrix.shape[1]
-		mod_matrix = np.zeros((width, height, 3))
 
 		seeds = self._generateSeeds(numSeeds, width, height)
 
@@ -67,7 +66,6 @@ class Mosaic:
 		t0 = time()
 		width = matrix.shape[0]
 		height = matrix.shape[1]
-		mod_matrix = np.zeros((width, height, 3))
 
 		seeds = self._generateSeeds(numSeeds, width, height)
 		seed_colors = matrix[seeds[:, 0], seeds[:, 1], :]
@@ -77,7 +75,7 @@ class Mosaic:
 		matrix_row, matrix_col = np.meshgrid(matrix_row_idx, matrix_col_idx, indexing="ij")
 
 		matrix_coord = np.stack((matrix_row.ravel(), matrix_col.ravel()), axis=1)
-		all_dist_idx = cdist(matrix_coord, seeds, 'correlation')
+		all_dist_idx = cdist(matrix_coord, seeds)
 		
 		min_dist_idx = all_dist_idx.argmin(axis=1)
 		min_dist_idx = min_dist_idx.reshape((width, height))
@@ -88,10 +86,7 @@ class Mosaic:
 		return mod_matrix
 
 	def _generateSeeds(self, numSeeds, width, height):
-		seedList = []
-		for _ in range(numSeeds):
-			col = randint(0, height - 1)
-			row = randint(0, width - 1)
-			seedList.append((row, col))
-			seedArray = np.array(seedList)
+		cols = np.random.randint(height, size=numSeeds)
+		rows = np.random.randint(width, size=numSeeds)
+		seedArray = np.stack([rows, cols], axis=-1)
 		return seedArray
