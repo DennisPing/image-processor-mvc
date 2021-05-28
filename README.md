@@ -23,8 +23,8 @@ The point of this project is to learn Python by redo-ing my old Java homework. T
 - [x] Greyscale
 - [x] Sepia
 - [x] Mosaic
-- [ ] Pixelate
-- [ ] Dither
+- [x] Pixelate
+- [x] Dither (slow version)
 
 ## To-do
 - [ ] Controller

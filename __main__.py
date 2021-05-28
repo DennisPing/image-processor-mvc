@@ -4,10 +4,10 @@ from PIL import Image
 
 if __name__ == "__main__":
 	ps1 = photoshop.Photoshop()
-	path = '/Users/dennisping/image-processor-mvc/res/lowfi.jpg'
+	path = '/Users/dennisping/Documents/image-processor-mvc/res/lowfi.jpg'
 	#path = None
 	ps1.load(path)
 
-	ps1.mosaic(500)
+	ps1.pixelate(50)
 	myImage = ps1.getImage()
 	myImage.show()
