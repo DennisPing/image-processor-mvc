@@ -1,6 +1,6 @@
 import numpy as np
 from time import time
-from model.filters.boxed import Boxed 
+from model.filters.boxed import Boxed
 
 class Pixelate(Boxed):
     
@@ -17,7 +17,6 @@ class Pixelate(Boxed):
         all superpixels as close to square as possible.
         This implementation splits the image into 4 sectors and pixelates.
         """
-
         if numSuperPixels <= 0:
             raise ValueError("Number of superpixels cannot be 0 or negative")
         if numSuperPixels > matrix.shape[1] or numSuperPixels > matrix.shape[0]:
