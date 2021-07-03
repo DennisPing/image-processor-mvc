@@ -11,17 +11,16 @@ def readImage(filename):
         raise TypeError("Filename is None")
     try:
         img = Image.open(filename)
-        matrix = np.asarray(Image.open(filename))
+        matrix = np.asarray(img)
         if img.mode in ('RGBA', 'LA') or (img.mode == 'P' and 'transparency' in img.info):
             matrix = rgba2rgb(matrix)
-            print(matrix.shape)
         return matrix.astype(int)
     except FileNotFoundError as e:
         raise e
 
 def writeImage(matrix, filename):
     """ 
-    Write a 3d numpy array to an image file. It write both RGB and RGBA images.
+    Write a 3d numpy array to an image file. Default output format is PNG.
      """
     if matrix is None:
         raise TypeError("Matrix is None")
@@ -30,6 +29,7 @@ def writeImage(matrix, filename):
     # if extension is None:
     #     raise TypeError("Extension is None")
     try:
+        # FUTURE: SAVE AS PNG BY DEFAULT
         image = Image.fromarray(np.uint8(matrix)).convert('RGB')
         image.save(filename)
     except OSError:
@@ -52,18 +52,6 @@ def getImage(matrix):
     Convert the 3d numpy array back into an image. 
     """
     return Image.fromarray(np.uint8(matrix)).convert('RGB')
-
-def alpha_composite_with_color(image, color=(255, 255, 255)):
-    """Alpha composite an RGBA image with a single color image of the
-    specified color and the same size as the original image.
-
-    Keyword Arguments:
-    image -- PIL RGBA Image object
-    color -- Tuple r, g, b (default 255, 255, 255)
-
-    """
-    background = Image.new('RGBA', size=image.size, color=color + (255,))
-    return Image.alpha_composite(image, background)
 
 def rgba2rgb( rgba, background=(255,255,255) ):
     row, col, ch = rgba.shape

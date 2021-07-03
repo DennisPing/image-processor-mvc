@@ -2,6 +2,44 @@ import numpy as np
 from random import randint
 from time import time
 from scipy.spatial.distance import cdist
+from numba import njit
+import sys
+
+# def generateSeedsNumba(numSeeds, width, height):
+#     cols = np.random.randint(height, size=numSeeds)
+#     rows = np.random.randint(width, size=numSeeds)
+#     seedArray = np.stack([rows, cols], axis=-1)
+#     return seedArray
+
+@njit
+def findClosestPoint(row, col, seedArray):
+    closestPoint = (sys.maxsize, sys.maxsize)
+    closestDist = sys.maxsize
+    for seed in seedArray:
+        dist = ((row - seed[0]) ** 2) + ((col - seed[1]) ** 2)
+        if dist < closestDist:
+            closestDist = dist
+            closestPoint = (seed[0], seed[1])
+    return closestPoint
+
+@njit
+def fast_mosaic_Numba(matrix, seeds):
+    """
+    Use Numba to compile code.
+    """
+    width = matrix.shape[0]
+    height = matrix.shape[1]
+    mod_matrix = np.zeros((width, height, 3))
+
+    for row in range(width):
+        for col in range(height):
+            closestPoint = findClosestPoint(row, col, seeds)
+            r, c = closestPoint
+            mod_matrix[row, col, 0] = matrix[r, c, 0]
+            mod_matrix[row, col, 1] = matrix[r, c, 1]
+            mod_matrix[row, col, 2] = matrix[r, c, 2]
+    return mod_matrix
+
 
 class Mosaic:
 
@@ -10,6 +48,15 @@ class Mosaic:
 
     def apply(self, matrix, numSeeds):
         return self.fast_mosaic(matrix, numSeeds)
+    
+    def numba_mosaic(self, matrix, numSeeds):
+        t0 = time()
+        width = matrix.shape[0]
+        height = matrix.shape[1]
+        seeds = self._generateSeeds(numSeeds, width, height)
+        mod_matrix = fast_mosaic_Numba(matrix, seeds)
+        print(time() - t0)
+        return mod_matrix
 
     def better_mosaic(self, matrix, numSeeds):
         """
