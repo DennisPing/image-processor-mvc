@@ -42,7 +42,7 @@ def fast_mosaic_Numba(matrix, seeds):
     """
     width = matrix.shape[0]
     height = matrix.shape[1]
-    mod_matrix = np.zeros((width, height, 3))
+    mod_matrix = np.empty((width, height, 3))
 
     for row in range(width):
         for col in range(height):

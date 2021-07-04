@@ -11,6 +11,6 @@ if __name__ == "__main__":
     #path = '/Users/dennisping/Documents/image-processor-mvc/res/Jiufen.png'
     ps1.load(path)
 
-    ps1.pixelate(100)
+    ps1.dmcColor(100)
     myImage = ps1.getImage()
     myImage.show()
