@@ -1,5 +1,5 @@
 from model import util
-from model.filters import blur, sharpen, greyscale, sepia, dither, mosaic, pixelate
+from model.filters import blur, sharpen, greyscale, sepia, dither, mosaic, pixelate, dmc
 from time import time
 from copy import deepcopy
 
@@ -127,12 +127,21 @@ class Photoshop:
 
     def pixelate(self, numSuperPixels):
         """
-        Apply a pixelation effect to the image
+        Apply a pixelation effect to the image.
         :param numSeeds: The number of square superpixels to apply across the image.
         """
         tempMatrix = deepcopy(self.modMatrix)
         pixelateWorker = pixelate.Pixelate()
         tempMatrix = pixelateWorker.apply(tempMatrix, numSuperPixels)
+        self.modMatrix = tempMatrix
+
+    def dmcColor(self, numSuperPixels):
+        """
+        Convert all the colors to a DMC color palette.
+        """
+        tempMatrix = deepcopy(self.modMatrix)
+        dmcWorker = dmc.Dmc()
+        tempMatrix = dmcWorker.apply(tempMatrix, numSuperPixels)
         self.modMatrix = tempMatrix
 
     def _checkStrength(self, strength):

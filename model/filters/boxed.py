@@ -1,5 +1,5 @@
 from abc import ABCMeta
-
+import numpy as np
 import math
 
 class Boxed(metaclass = ABCMeta):
@@ -19,13 +19,20 @@ class Boxed(metaclass = ABCMeta):
         width = matrix.shape[0]
         height = matrix.shape[1]
 
-        # Calculate the widths
-        self.squareSize = math.floor(height / numSuperPixels)
+    #     self.squareSize = math.floor(height / numSuperPixels)
+    #     A = np.array([[self.squareSize, self.squareSize + 1], [1, 1]])
+    #     B = np.array([[height, numSuperPixels]])
+    #     z = np.linalg.solve(A, B)
+    #     self.normalCols = z[0]
+    #     self.offsetCols = z[1]
+
+        # Calculate the widths (vertical)
+        self.squareSize = math.floor(width / numSuperPixels)
         self.offsetRowsWidth = self.squareSize + 1
         self.offsetRows = width % numSuperPixels
         self.normalRows = numSuperPixels - self.offsetRows
 
-        # Calculate the heights
+        # Calculate the heights (horizontal)
         temp = math.floor(height / self.squareSize)
         self.offsetCols = height % self.squareSize
         self.normalCols = temp - self.offsetCols

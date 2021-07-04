@@ -1,5 +1,5 @@
 
-class Grain:
+# class Grain:
 
     # Make a separate layer of one gray color
     
@@ -10,5 +10,4 @@ class Grain:
 
     # Finally blur the noise layer because grain doesn't have sharp edges
 
-    # Merge the two 
-    
+    # Merge the two

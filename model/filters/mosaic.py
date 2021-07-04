@@ -2,14 +2,27 @@ import numpy as np
 from random import randint
 from time import time
 from scipy.spatial.distance import cdist
-from numba import njit
+from numba import njit, types, typed
 import sys
+import itertools
 
-# def generateSeedsNumba(numSeeds, width, height):
-#     cols = np.random.randint(height, size=numSeeds)
-#     rows = np.random.randint(width, size=numSeeds)
-#     seedArray = np.stack([rows, cols], axis=-1)
-#     return seedArray
+def applyMosaic(matrix, numSeeds):
+    t1 = time()
+    width = matrix.shape[0]
+    height = matrix.shape[1]
+    seeds = generateSeedsNumba(numSeeds, width, height)
+    mod_matrix = fast_mosaic_Numba(matrix, seeds)
+    print(time() - t1)
+    return mod_matrix
+
+@njit
+def generateSeedsNumba(numSeeds, width, height):
+    seedArray = set()
+    while len(seedArray) < numSeeds:
+        coord = (randint(0, width-1), randint(0, height-1))
+        if coord not in seedArray:
+            seedArray.add(coord)
+    return typed.List(seedArray)
 
 @njit
 def findClosestPoint(row, col, seedArray):
@@ -47,16 +60,10 @@ class Mosaic:
         pass
 
     def apply(self, matrix, numSeeds):
-        return self.fast_mosaic(matrix, numSeeds)
-    
-    def numba_mosaic(self, matrix, numSeeds):
-        t0 = time()
-        width = matrix.shape[0]
-        height = matrix.shape[1]
-        seeds = self._generateSeeds(numSeeds, width, height)
-        mod_matrix = fast_mosaic_Numba(matrix, seeds)
-        print(time() - t0)
-        return mod_matrix
+        if matrix.shape[0] * matrix.shape[1] <= 408_960: # Under 480p
+            return self.fast_mosaic(matrix, numSeeds)
+        else:
+            return applyMosaic(matrix, numSeeds)
 
     def better_mosaic(self, matrix, numSeeds):
         """
@@ -130,10 +137,9 @@ class Mosaic:
         return mod_matrix
 
     def _generateSeeds(self, numSeeds, width, height):
-        # rows = np.random.choice(np.arange(0, width), replace=False, size=numSeeds)
-        # cols = np.random.choice(np.arange(0, height), replace=False, size=numSeeds)
-        # seedArray = np.stack([rows, cols], axis=-1)
-        cols = np.random.randint(height, size=numSeeds)
-        rows = np.random.randint(width, size=numSeeds)
-        seedArray = np.stack([rows, cols], axis=-1)
-        return seedArray
+        seedArray = set()
+        while len(seedArray) < numSeeds:
+            coord = (randint(0, width-1), randint(0, height-1))
+            if coord not in seedArray:
+                seedArray.add(coord)
+        return np.array(list(seedArray))

@@ -61,6 +61,3 @@ class Pixelate(Boxed):
 
     def _replace_colors(self, matrix, row, col, sqVert, sqHoriz):
         return matrix[row:row+sqVert, col:col+sqHoriz].mean(axis=(0,1))
-
-		
-
